@@ -1,0 +1,11 @@
+---
+- name: Write profile additions for clamd
+  ansible.builtin.copy:
+    content: "/DATA/** r,"
+    dest: "/etc/apparmor.d/local/usr.sbin.clamd"
+    mode: '0644'
+
+- name: Parse profile additions for clamd
+  ansible.builtin.command: apparmor_parser -r /etc/apparmor.d/usr.sbin.clamd
+  register: parse_aa_rule
+  changed_when: parse_aa_rule.rc != 0
